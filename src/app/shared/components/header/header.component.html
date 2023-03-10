@@ -1,0 +1,70 @@
+<div class="flex-container flex gap-2 min-h-[60px] py-3.5 bg-white shadow">
+  <nav class="grow">
+    <ul
+      class="flex justify-center gap-3 md:justify-between"
+      [ngClass]="{ 'justify-between': userAuthorized }"
+    >
+      <li>
+        <a
+          href=""
+          title="Bookreader"
+          class="w-[33px] h-[33px] flex items-center justify-center rounded-full hover:bg-gray-200 focus:bg-gray-200"
+          ><svg-icon src="/assets/icons/logo.svg" class="w-7"></svg-icon
+        ></a>
+      </li>
+      <li *ngIf="userAuthorized">
+        <a
+          href=""
+          title="Profile"
+          class="group hidden items-center gap-3 md:flex self-center font-light"
+          ><span
+            class="w-[33px] h-[33px] flex items-center justify-center rounded-full group-hover:bg-gray-200 group-focus:bg-gray-200 text-center font-semibold"
+            >{{ userName | slice : 0 : 1 | uppercase }}</span
+          >
+          <span class="group-hover:underline">{{ userName }}</span>
+        </a>
+      </li>
+      <li *ngIf="userAuthorized">
+        <ul class="flex gap-3">
+          <li>
+            <a
+              href=""
+              title="Library"
+              class="w-[33px] h-[33px] flex items-center justify-center rounded-full hover:bg-gray-200 focus:bg-gray-200"
+              ><svg-icon name="book" class="w-5"></svg-icon
+            ></a>
+          </li>
+          <li>
+            <a
+              href=""
+              title="Training"
+              class="w-[33px] h-[33px] flex items-center justify-center rounded-full hover:bg-gray-200 focus:bg-gray-200"
+              ><svg-icon name="clock" class="w-5"></svg-icon
+            ></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <ul
+    class="flex gap-3 before:h-[33px] before:w-px before:bg-gray-250"
+    *ngIf="userAuthorized"
+  >
+    <li class="md:hidden">
+      <a
+        href=""
+        title="Profile"
+        class="w-[33px] h-[33px] flex items-center justify-center rounded-full hover:bg-gray-200 focus:bg-gray-200"
+        ><span class="text-center font-semibold">{{
+          userName | slice : 0 : 1 | uppercase
+        }}</span></a
+      >
+    </li>
+    <li>
+      <a href="" class="underline hover:no-underline leading-[33px]">
+        Logout
+      </a>
+    </li>
+  </ul>
+</div>
