@@ -5,7 +5,6 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { AngularSvgIconPreloaderModule } from 'angular-svg-icon-preloader';
 
 import { AppRoutingModule } from './app-routing.module';
-import { LoginModule } from './modules/login/login.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './modules/header/header.component';
 
@@ -19,7 +18,6 @@ import { HeaderComponent } from './modules/header/header.component';
     AngularSvgIconPreloaderModule.forRoot({
       configUrl: './assets/svg-icons.json',
     }),
-    LoginModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
