@@ -7,6 +7,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/login/login.module').then((m) => m.LoginModule),
   },
+  {
+    path: 'google-redirect',
+    loadChildren: () =>
+      import('./modules/google-redirect/google-redirect.module').then(
+        (m) => m.GoogleRedirectModule
+      ),
+  },
 ];
 
 @NgModule({
