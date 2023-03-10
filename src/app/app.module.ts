@@ -7,7 +7,7 @@ import { AngularSvgIconPreloaderModule } from 'angular-svg-icon-preloader';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginModule } from './modules/login/login.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './shared/components/header/header.component';
+import { HeaderComponent } from './modules/header/header.component';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],

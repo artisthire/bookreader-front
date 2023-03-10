@@ -1,3 +1,28 @@
-<div class="main-content">
+<div class="main-content lg:grid lg:grid-cols-[550px_1fr]">
   <app-login-form></app-login-form>
+  <div
+    class="flex-container pt-6 pb-12 md:pt-20 md:pb-24 lg:flex lg:flex-col lg:justify-center lg:h-full lg:-mt-[50px]"
+  >
+    <svg-icon
+      src="/assets/icons/quote.svg"
+      class="block mx-auto mb-2 w-6 h-6 fill-orange md:mb-3"
+    ></svg-icon>
+    <figure
+      class="block max-w-[250px] md:max-w-[410px] mx-auto text-center font-medium"
+    >
+      <blockquote
+        class="mb-4 text-[0.8125rem] text-gray-600 md:text-2xl md:mb-5"
+      >
+        <p>{{ quote }}</p>
+      </blockquote>
+      <figcaption
+        class="relative inline-block pt-[13px] text-sm text-gray-500 md:text-xl"
+      >
+        <cite
+          class="not-italic before:absolute before:top-0 before:h-[1px] before:w-full before:bg-current"
+          >{{ quoteAuthor }}</cite
+        >
+      </figcaption>
+    </figure>
+  </div>
 </div>
