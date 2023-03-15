@@ -10,5 +10,5 @@ export class HeaderComponent {
   public userName: string = 'Martha Stewart';
 
   @Input()
-  public userAuthorized: boolean = false;
+  public userAuthorized: boolean = true;
 }

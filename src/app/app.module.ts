@@ -1,25 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { AngularSvgIconModule } from 'angular-svg-icon';
-import { AngularSvgIconPreloaderModule } from 'angular-svg-icon-preloader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './modules/header/header.component';
+import { CoreModule } from './core/core.module';
+import { HeaderModule } from './modules/header/header.module';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    AngularSvgIconModule.forRoot(),
-    AngularSvgIconPreloaderModule.forRoot({
-      configUrl: './assets/svg-icons.json',
-    }),
+    CoreModule,
+    HeaderModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
