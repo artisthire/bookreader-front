@@ -2,8 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { environment } from './../../environments/environment';
-import { AuthenticationInterceptor } from './http-interceptors/authentication-interceptor';
-import { API_URL } from './injection-tokens/injection-tokens';
+import {
+  AuthenticationInterceptor,
+  API_URL,
+} from './services/authentication-interceptor';
 
 @NgModule({
   declarations: [],

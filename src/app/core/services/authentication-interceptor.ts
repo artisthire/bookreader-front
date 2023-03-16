@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import {
   HttpEvent,
   HttpInterceptor,
@@ -6,6 +6,7 @@ import {
   HttpRequest,
   HttpErrorResponse,
 } from '@angular/common/http';
+import { Router } from '@angular/router';
 import {
   catchError,
   EMPTY,
@@ -17,16 +18,15 @@ import {
   timeout,
 } from 'rxjs';
 
-import { API_URL } from '../injection-tokens/injection-tokens';
 import { AuthService } from '../../shared/services/auth.service';
-import { Router } from '@angular/router';
+import { apiEndpoints } from '../utils/api-endpoints';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
   private PUBLIC_API_ENDPOINTS: string[] = [
-    'auth/login',
-    'auth/register',
-    'auth/refresh',
+    apiEndpoints.auth.login,
+    apiEndpoints.auth.register,
+    apiEndpoints.auth.refresh,
   ];
   private tokenRefreshing: boolean = false;
   private tokenRefreshTimeout: number = 30000;
@@ -62,7 +62,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> | Observable<never> {
     if (error.status === 401) {
-      if (error.url?.endsWith('/refresh')) {
+      if (error.url?.endsWith(apiEndpoints.auth.refresh)) {
         this.tokenRefreshing = false;
         this.logout();
         return EMPTY;
@@ -120,3 +120,5 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     return req;
   }
 }
+
+export const API_URL = new InjectionToken<string>('API_URL');
