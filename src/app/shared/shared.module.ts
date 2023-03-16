@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GoogleBtnComponent } from './components/google-btn/google-btn.component';
-import { AngularSvgIconModule } from 'angular-svg-icon';
-
+import { SvgIconComponent } from './components/svg-icon/svg-icon.component';
+import { AuthService } from './services/auth.service';
 @NgModule({
-  declarations: [GoogleBtnComponent],
-  imports: [CommonModule, AngularSvgIconModule],
-  exports: [GoogleBtnComponent, AngularSvgIconModule],
+  declarations: [SvgIconComponent],
+  imports: [CommonModule],
+  providers: [AuthService],
+  exports: [SvgIconComponent],
 })
 export class SharedModule {}

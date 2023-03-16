@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run sprites && ng serve",
-    "build": "npm run sprites && ng build",
-    "watch": "npm run sprites && ng build --watch --configuration development",
+    "prestart": "npm run sprites",
+    "start": "ng serve",
+    "prebuild": "npm run sprites",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "sprites": "svg-sprite --config sprite-config.json src/svgs/*.svg"
   },
