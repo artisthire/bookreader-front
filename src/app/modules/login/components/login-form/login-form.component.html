@@ -5,7 +5,11 @@
     <div class="md:p-10 md:bg-white">
       <app-google-btn class="block mb-5"></app-google-btn>
 
-      <form class="font-normal space-y-5">
+      <form
+        class="font-normal space-y-5"
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+      >
         <p>
           <label
             for="email"
@@ -17,7 +21,14 @@
             id="email"
             placeholder="your@email.com"
             class="w-full px-2 py-3 bg-gray-200 shadow-inner placeholder:text-gray-400"
+            formControlName="email"
           />
+          <span
+            class="pl-1 text-dark-orange text-xs font-semibold"
+            *ngIf="emailInput.errors?.['invalidEmail'].value && (emailInput.touched || emailInput.dirty || formSubmitted)"
+          >
+            {{emailInput.errors?.['invalidEmail'].value}}
+          </span>
         </p>
 
         <p>
@@ -31,12 +42,21 @@
             id="password"
             placeholder="Password"
             class="w-full px-2 py-3 bg-gray-200 shadow-inner placeholder:text-gray-400"
+            maxlength="30"
+            formControlName="password"
           />
+          <span
+            class="pl-1 text-dark-orange text-xs font-semibold"
+            *ngIf="passwordInput.errors?.['invalidPassword'].value && (passwordInput.touched || passwordInput.dirty || formSubmitted)"
+          >
+            {{passwordInput.errors?.['invalidPassword'].value}}
+          </span>
         </p>
 
         <button
           type="submit"
-          class="w-full p-[1.125rem] text-base font-semibold text-white bg-orange shadow-sm hover:bg-dark-orange focus:bg-dark-orange transition-colors"
+          class="w-full p-[1.125rem] text-base font-semibold text-white bg-orange shadow-sm transition-colors hover:bg-dark-orange focus:bg-dark-orange disabled:opacity-80 disabled:hover:bg-orange disabled:focus:bg-orange"
+          [disabled]="loginForm.invalid && (loginForm.touched || formSubmitted)"
         >
           Login
         </button>

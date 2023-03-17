@@ -1,0 +1,7 @@
+input.ng-invalid {
+  &.ng-touched,
+  &.ng-dirty,
+  form.ng-submitted & {
+    outline: 2px solid #be3232;
+  }
+}

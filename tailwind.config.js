@@ -19,6 +19,7 @@ module.exports = {
       blue: "#091E3F",
       orange: "#FF6B08",
       "dark-orange": "#D15807",
+      red: "#BE3232",
       transparent: "transparent",
       current: "currentColor",
     },
