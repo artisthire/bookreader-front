@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, ITokens } from 'src/app/shared/services/auth.service';
+import { AuthService } from 'src/app/core/services/auth.service';
+
+interface IRedirectTokens {
+  accessToken: string;
+  refreshToken: string;
+}
 
 @Component({
   selector: 'app-google-redirect',
@@ -15,8 +20,11 @@ export class GoogleRedirectComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const tokens = this.route.snapshot.queryParams as ITokens;
-    this.authService.login(tokens);
+    const tokens = this.route.snapshot.queryParams as IRedirectTokens;
+    this.authService.saveTokens({
+      access: tokens.accessToken,
+      refresh: tokens.refreshToken,
+    });
     this.router.navigate(['']);
   }
 }

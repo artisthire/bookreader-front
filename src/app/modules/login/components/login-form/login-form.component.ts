@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
 import {
   emailValidator,
   passwordValidator,
@@ -13,7 +15,11 @@ import {
 export class LoginFormComponent {
   public formSubmitted: boolean = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   public loginForm = this.fb.group({
     email: ['', [emailValidator]],
@@ -25,6 +31,12 @@ export class LoginFormComponent {
 
   public onSubmit(): void {
     this.formSubmitted = true;
-    console.log(this.loginForm);
+    const { email, password } = this.loginForm.value;
+
+    if (email && password && this.loginForm.valid) {
+      this.authService.login({ email, password }).subscribe(() => {
+        this.router.navigate(['']);
+      });
+    }
   }
 }

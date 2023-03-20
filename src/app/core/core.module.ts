@@ -6,6 +6,8 @@ import {
   AuthenticationInterceptor,
   API_URL,
 } from './services/authentication-interceptor';
+import { UserService } from './services/user.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [],
@@ -17,6 +19,8 @@ import {
       multi: true,
     },
     { provide: API_URL, useValue: environment.apiUrl },
+    UserService,
+    AuthService,
   ],
   exports: [],
 })

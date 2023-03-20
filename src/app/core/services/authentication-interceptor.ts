@@ -18,7 +18,7 @@ import {
   timeout,
 } from 'rxjs';
 
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthService } from './auth.service';
 import { apiEndpoints } from '../utils/api-endpoints';
 
 @Injectable()
@@ -69,7 +69,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       }
 
       return this.refreshToken().pipe(
-        timeout({ each: this.tokenRefreshTimeout, meta: { url: error.url } }),
+        timeout(this.tokenRefreshTimeout),
         switchMap(() => {
           const authReq = this.addAuthHeader(req);
           return next.handle(authReq);
@@ -106,7 +106,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   }
 
   private logout() {
-    this.authService.logout();
+    this.authService.deleteCredentials();
     this.router.navigate(['login']);
   }
 
