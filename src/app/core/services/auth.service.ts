@@ -26,11 +26,11 @@ export class AuthService {
   constructor(private http: HttpClient, private userService: UserService) {}
 
   login(userData: Omit<IRegisterUser, 'name'>): Observable<AuthUser> {
-    return this.sendCredentials(userData);
+    return this.getCredentials(userData, true);
   }
 
   register(userData: IRegisterUser): Observable<AuthUser> {
-    return this.sendCredentials(userData);
+    return this.getCredentials(userData, false);
   }
 
   logout(): Observable<void> {
@@ -89,11 +89,13 @@ export class AuthService {
     this.saveTokens({ access: '', refresh: '' });
   }
 
-  private sendCredentials(userData: IRegisterUser): Observable<AuthUser> {
-    // if have 'user name' it's register page
-    const apiEndpoint = userData.name
-      ? apiEndpoints.auth.register
-      : apiEndpoints.auth.login;
+  private getCredentials(
+    userData: IRegisterUser,
+    isLogginRoute: boolean = false
+  ): Observable<AuthUser> {
+    const apiEndpoint = isLogginRoute
+      ? apiEndpoints.auth.login
+      : apiEndpoints.auth.register;
 
     return this.http.post<AuthUser>(apiEndpoint, userData).pipe(
       tap((resp: AuthUser) => {

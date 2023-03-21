@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import {
   emailValidator,
@@ -14,6 +15,13 @@ import {
 })
 export class LoginFormComponent {
   public formSubmitted: boolean = false;
+  public loading: boolean = false;
+  public loginForm = this.fb.group({
+    email: ['', [emailValidator]],
+    password: ['', [passwordValidator]],
+  });
+  public emailInput = this.loginForm.controls.email;
+  public passwordInput = this.loginForm.controls.password;
 
   constructor(
     private fb: FormBuilder,
@@ -21,22 +29,18 @@ export class LoginFormComponent {
     private authService: AuthService
   ) {}
 
-  public loginForm = this.fb.group({
-    email: ['', [emailValidator]],
-    password: ['', [passwordValidator]],
-  });
-
-  public emailInput = this.loginForm.controls.email;
-  public passwordInput = this.loginForm.controls.password;
-
   public onSubmit(): void {
     this.formSubmitted = true;
     const { email, password } = this.loginForm.value;
 
     if (email && password && this.loginForm.valid) {
-      this.authService.login({ email, password }).subscribe(() => {
-        this.router.navigate(['']);
-      });
+      this.loading = true;
+      this.authService
+        .login({ email, password })
+        .pipe(finalize(() => (this.loading = false)))
+        .subscribe(() => {
+          this.router.navigate(['']);
+        });
     }
   }
 }

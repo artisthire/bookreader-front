@@ -55,10 +55,18 @@
 
         <button
           type="submit"
-          class="w-full p-[1.125rem] text-base font-semibold text-white bg-orange shadow-sm transition-colors hover:bg-dark-orange focus:bg-dark-orange disabled:opacity-80 disabled:hover:bg-orange disabled:focus:bg-orange"
+          class="w-full p-1 text-base font-semibold text-white bg-orange shadow-sm transition-colors hover:bg-dark-orange focus:bg-dark-orange disabled:opacity-80 disabled:hover:bg-orange disabled:focus:bg-orange"
+          [ngClass]="{ 'opacity-80': loading }"
           [disabled]="loginForm.invalid && (loginForm.touched || formSubmitted)"
         >
-          Login
+          <span class="flex items-center justify-center -ml-12"
+            ><svg-icon
+              icon="spinner-loading"
+              class="h-12 w-12 mr-2"
+              [ngClass]="{ invisible: !loading, 'animate-spin-slow': loading }"
+            ></svg-icon>
+            Login</span
+          >
         </button>
       </form>
 
