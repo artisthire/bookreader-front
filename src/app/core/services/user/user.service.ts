@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
-export interface IUser {
-  name: string;
-  email: string;
-  _id: string;
-}
+import { IUser } from './user.model';
 
 @Injectable()
 export class UserService {

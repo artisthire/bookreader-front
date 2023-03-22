@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
+
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import {
   emailValidator,
   passwordValidator,

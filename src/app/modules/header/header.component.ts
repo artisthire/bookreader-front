@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { finalize, Subscription } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { IUser, UserService } from 'src/app/core/services/user.service';
+
+import { selectUser } from 'src/app/store/selectors/user.selectors';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
+import { ILoginUser } from 'src/app/core/services/user/user.model';
 
 @Component({
   selector: 'app-header',
@@ -10,23 +13,24 @@ import { IUser, UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  private userObservabler$!: Subscription;
-  public user: IUser | null = null;
+  private userSubscription!: Subscription;
+  public user!: ILoginUser;
 
   constructor(
     private router: Router,
-    private userService: UserService,
+    private store: Store,
+    // private userService: UserService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.userObservabler$ = this.userService.userData$.subscribe((user) => {
-      this.user = user;
-    });
+    this.userSubscription = this.store
+      .select(selectUser)
+      .subscribe((user) => (this.user = user));
   }
 
   ngOnDestroy(): void {
-    this.userObservabler$.unsubscribe();
+    this.userSubscription.unsubscribe();
   }
 
   public logout(): void {

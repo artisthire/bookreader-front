@@ -18,7 +18,7 @@ import {
   timeout,
 } from 'rxjs';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './auth/auth.service';
 import { apiEndpoints } from '../utils/api-endpoints';
 
 @Injectable()
