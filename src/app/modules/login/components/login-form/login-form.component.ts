@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -13,6 +17,7 @@ import {
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent {
   public formSubmitted: boolean = false;
@@ -27,6 +32,7 @@ export class LoginFormComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private cd: ChangeDetectorRef,
     private authService: AuthService
   ) {}
 
@@ -38,7 +44,12 @@ export class LoginFormComponent {
       this.loading = true;
       this.authService
         .login({ email, password })
-        .pipe(finalize(() => (this.loading = false)))
+        .pipe(
+          finalize(() => {
+            this.loading = false;
+            this.cd.markForCheck();
+          })
+        )
         .subscribe(() => {
           this.router.navigate(['']);
         });

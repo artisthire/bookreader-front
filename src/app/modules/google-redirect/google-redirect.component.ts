@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 
@@ -11,6 +11,7 @@ interface IRedirectTokens {
   selector: 'app-google-redirect',
   templateUrl: './google-redirect.component.html',
   styleUrls: ['./google-redirect.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GoogleRedirectComponent implements OnInit {
   constructor(

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'svg-icon',
@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
       <use attr.xlink:href="assets/sprites/sprite.symbol.svg#{{ icon }}"></use>
     </svg>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SvgIconComponent {
   @Input() icon!: string;

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { finalize, Subscription } from 'rxjs';
@@ -11,6 +17,7 @@ import { ILoginUser } from 'src/app/core/services/user/user.model';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private userSubscription!: Subscription;
@@ -19,14 +26,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private store: Store,
-    // private userService: UserService,
+    private cd: ChangeDetectorRef,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.userSubscription = this.store
-      .select(selectUser)
-      .subscribe((user) => (this.user = user));
+    this.userSubscription = this.store.select(selectUser).subscribe((user) => {
+      this.user = user;
+      this.cd.markForCheck();
+    });
   }
 
   ngOnDestroy(): void {
