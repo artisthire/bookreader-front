@@ -10,6 +10,7 @@ import { UserService } from './services/user/user.service';
 import { AuthService } from './services/auth/auth.service';
 import { ModalService } from './services/modal/modal.service';
 import { ModalComponent } from './components/modal/modal.component';
+import { ErrorService } from './services/error/error.service';
 
 @NgModule({
   declarations: [ModalComponent],
@@ -24,6 +25,7 @@ import { ModalComponent } from './components/modal/modal.component';
     UserService,
     AuthService,
     ModalService,
+    ErrorService,
   ],
   exports: [ModalComponent],
 })
