@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import { IModal } from 'src/app/core/services/modal/modal.model';
 import { ModalService } from 'src/app/core/services/modal/modal.service';
 import { INotifyModalData } from './notify-modal.model';
@@ -10,10 +14,17 @@ import { INotifyModalData } from './notify-modal.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotifyModalComponent implements IModal<INotifyModalData> {
-  @Input()
-  data!: INotifyModalData;
+  set data(data: INotifyModalData) {
+    this._data = data;
+    this.cd.detectChanges();
+  }
 
-  constructor(private modalService: ModalService) {}
+  public _data!: INotifyModalData;
+
+  constructor(
+    private readonly cd: ChangeDetectorRef,
+    private readonly modalService: ModalService
+  ) {}
 
   public onClick(): void {
     this.modalService.close();

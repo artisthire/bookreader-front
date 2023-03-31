@@ -8,8 +8,6 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { AuthService } from 'src/app/core/services/auth/auth.service';
-import { ModalService } from 'src/app/core/services/modal/modal.service';
-import { NotifyModalComponent } from 'src/app/shared/components/notify-modal/notify-modal.component';
 import {
   emailValidator,
   passwordValidator,
@@ -35,16 +33,8 @@ export class LoginFormComponent {
     private fb: FormBuilder,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private authService: AuthService,
-    private modalService: ModalService
+    private authService: AuthService
   ) {}
-
-  public showModal() {
-    this.modalService.open({
-      component: NotifyModalComponent,
-      data: { title: 'Test', text: 'Something content' },
-    });
-  }
 
   public onSubmit(): void {
     this.formSubmitted = true;
@@ -60,13 +50,9 @@ export class LoginFormComponent {
             this.cd.markForCheck();
           })
         )
-        .subscribe({
-          complete: () => this.router.navigate(['']),
-          error: (err) => console.log(err),
+        .subscribe(() => {
+          this.router.navigate(['']);
         });
-      // .subscribe(() => {
-      //   this.router.navigate(['']);
-      // });
     }
   }
 }

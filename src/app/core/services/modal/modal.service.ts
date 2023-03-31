@@ -4,10 +4,10 @@ import { IModalData } from './modal.model';
 
 @Injectable()
 export class ModalService {
-  private modalSubject$ = new Subject<IModalData | null>();
+  private modalSubject$ = new Subject<IModalData<any> | null>();
   public modalObservable$ = this.modalSubject$.asObservable();
 
-  public open(data: IModalData): void {
+  public open<T>(data: IModalData<T>): void {
     this.modalSubject$.next(data);
   }
 

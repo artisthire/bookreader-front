@@ -49,7 +49,7 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.modalService.modalObservable$.subscribe(
-      (data: IModalData | null) => {
+      (data: IModalData<any> | null) => {
         if (!data) {
           this.close();
         } else {
@@ -80,7 +80,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private open(data: IModalData): void {
+  private open(data: IModalData<any>): void {
     const modalContent = this.content.createComponent(data.component);
     modalContent.instance.data = data.data;
     this.modal.createEmbeddedView(this.modalTemplate);

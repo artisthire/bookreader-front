@@ -23,10 +23,15 @@ export class ErrorService {
   }
 
   getServerMessage(error: HttpErrorResponse): string {
-    return `${error.message}. Status code: ${error.status}`;
+    if (error.status === 0) {
+      return 'A client-side or network error occurred';
+    }
+
+    const message = error.error.message ?? error.message;
+    return `${message}. Status code: ${error.status}`;
   }
 
   getServerStack(error: HttpErrorResponse): string {
-    return 'stack';
+    return error.message;
   }
 }

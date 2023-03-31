@@ -4,6 +4,6 @@ export interface IModal<T> {
   data: T;
 }
 
-export interface IModalData extends IModal<any> {
+export interface IModalData<T> extends IModal<T> {
   component: Type<any>;
 }

@@ -18,8 +18,8 @@ import {
   timeout,
 } from 'rxjs';
 
-import { AuthService } from './auth/auth.service';
-import { apiEndpoints } from '../utils/api-endpoints';
+import { AuthService } from '../auth/auth.service';
+import { apiEndpoints } from '../../utils/api-endpoints';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
