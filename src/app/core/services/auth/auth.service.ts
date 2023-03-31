@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { finalize, Observable, tap, throwError } from 'rxjs';
@@ -28,7 +28,6 @@ export class AuthService {
     return this.http.get<void>(apiEndpoints.auth.logout).pipe(
       finalize(() => {
         this.clearTokens();
-        // this.userService.setUser(null);
         this.store.dispatch(UserActions.removeUser());
       })
     );
@@ -43,14 +42,7 @@ export class AuthService {
     const refreshToken = localStorage.getItem(this.REFRESH_TOKEN_KEY);
 
     if (!refreshToken) {
-      return throwError(
-        () =>
-          // emmit HttpErrorResponse for right process in HttpInterceptor error handler
-          new HttpErrorResponse({
-            error: new Error('Not provided refresh token'),
-            status: 401,
-          })
-      );
+      return throwError(() => new Error('Not provided refresh token'));
     }
 
     return this.http
@@ -75,7 +67,6 @@ export class AuthService {
   public deleteCredentials(): void {
     this.clearTokens();
     this.store.dispatch(UserActions.removeUser());
-    // this.userService.setUser(null);
   }
 
   private clearTokens(): void {
@@ -94,7 +85,6 @@ export class AuthService {
       tap((resp: IUserWithCredentials) => {
         this.saveTokens({ access: resp.access, refresh: resp.refresh });
         this.store.dispatch(UserActions.addUser({ user: resp.user }));
-        // this.userService.setUser(resp.user);
       })
     );
   }

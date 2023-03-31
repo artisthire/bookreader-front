@@ -1,0 +1,28 @@
+<!-- <div
+  class="fixed inset-0 z-50 justify-center items-center bg-[#2B2B2B]/20"
+  [ngClass]="show ? 'flex' : 'hidden'"
+  (click)="onOverlayClick($event)"
+>
+  <div
+    class="w-full max-w-[610px] px-[25px] py-[32px] bg-white shadow-xl"
+    #container
+  >
+    <ng-container #content></ng-container>
+  </div>
+</div> -->
+
+<ng-container #modal></ng-container>
+
+<ng-template #modalTemplate>
+  <div
+    class="fixed inset-0 z-50 flex justify-center items-center bg-[#2B2B2B]/20"
+    (click)="onOverlayClick($event)"
+  >
+    <div
+      class="w-full max-w-[610px] p-5 font-medium text-base bg-white shadow-xl"
+      #contentWrap
+    >
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-template>

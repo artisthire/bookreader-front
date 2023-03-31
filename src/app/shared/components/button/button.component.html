@@ -1,16 +1,9 @@
 <button
   [type]="type"
-  class="w-full p-1 text-base font-semibold text-white bg-orange shadow-sm overflow-hidden transition-colors hover:bg-dark-orange focus:bg-dark-orange disabled:opacity-80 disabled:hover:bg-orange disabled:focus:bg-orange"
-  [ngClass]="{ 'opacity-80': loading }"
+  class="relative flex items-center justify-center w-full p-2 text-base text-center font-semibold text-white bg-orange shadow-sm overflow-hidden transition-colors hover:bg-dark-orange focus:bg-dark-orange disabled:opacity-80 disabled:hover:bg-orange disabled:focus:bg-orange"
+  [ngClass]="{ loading }"
   [disabled]="disabled"
   (click)="this.onClick.emit()"
 >
-  <span class="flex items-center justify-center -ml-12"
-    ><svg-icon
-      icon="spinner-loading"
-      class="h-12 w-12 mr-2"
-      [ngClass]="{ invisible: !loading, 'animate-spin-slow': loading }"
-    ></svg-icon>
-    {{ text }}</span
-  >
+  {{ text }}
 </button>

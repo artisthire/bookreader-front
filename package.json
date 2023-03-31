@@ -1,5 +1,5 @@
 {
-  "name": "bookreader-front",
+  "name": "bookreader-front-angular",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

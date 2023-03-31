@@ -8,9 +8,11 @@ import {
 } from './services/authentication-interceptor';
 import { UserService } from './services/user/user.service';
 import { AuthService } from './services/auth/auth.service';
+import { ModalService } from './services/modal/modal.service';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [ModalComponent],
   imports: [CommonModule],
   providers: [
     {
@@ -21,7 +23,8 @@ import { AuthService } from './services/auth/auth.service';
     { provide: API_URL, useValue: environment.apiUrl },
     UserService,
     AuthService,
+    ModalService,
   ],
-  exports: [],
+  exports: [ModalComponent],
 })
 export class CoreModule {}

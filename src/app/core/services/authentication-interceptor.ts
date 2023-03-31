@@ -23,11 +23,11 @@ import { apiEndpoints } from '../utils/api-endpoints';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
-  private PUBLIC_API_ENDPOINTS: string[] = [
-    apiEndpoints.auth.login,
-    apiEndpoints.auth.register,
-    apiEndpoints.auth.refresh,
-  ];
+  private AUTH_ENDPOINTS = {
+    login: apiEndpoints.auth.login,
+    register: apiEndpoints.auth.register,
+    refresh: apiEndpoints.auth.refresh,
+  };
   private tokenRefreshing: boolean = false;
   private tokenRefreshTimeout: number = 30000;
   private tokenRefreshSource$ = new Subject();
@@ -45,7 +45,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> | Observable<never> {
     let cloneReq = req.clone({ url: `${this.API_URL}/${req.url}` });
 
-    if (!this.PUBLIC_API_ENDPOINTS.includes(req.url)) {
+    if (!Object.keys(this.AUTH_ENDPOINTS).includes(req.url)) {
       cloneReq = this.addAuthHeader(cloneReq);
     }
 
@@ -62,10 +62,17 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> | Observable<never> {
     if (error.status === 401) {
-      if (error.url?.endsWith(apiEndpoints.auth.refresh)) {
+      if (error.url?.endsWith(this.AUTH_ENDPOINTS.refresh)) {
         this.tokenRefreshing = false;
         this.logout();
         return EMPTY;
+      }
+
+      if (
+        error.url?.endsWith(this.AUTH_ENDPOINTS.login) ||
+        error.url?.endsWith(this.AUTH_ENDPOINTS.register)
+      ) {
+        throw error;
       }
 
       return this.refreshToken().pipe(
@@ -96,10 +103,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
           this.tokenRefreshing = false;
           this.tokenRefreshSource$.next(null);
         }),
-        catchError(() => {
+        catchError((err) => {
           this.tokenRefreshing = false;
           this.logout();
-          return EMPTY;
+          throw err;
         })
       );
     }
