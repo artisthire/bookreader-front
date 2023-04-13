@@ -4,42 +4,46 @@ import { Store } from '@ngrx/store';
 import { finalize, Observable, tap, throwError } from 'rxjs';
 
 import { apiEndpoints } from '../../utils/api-endpoints';
+import { IAuthData, ITokens, IUserWithCredentials } from './auth.model';
 import { UserActions } from 'src/app/store/actions/user.actions';
-import { ICredentials, ITokens, IUserWithCredentials } from './auth.model';
+import { TokensActions } from 'src/app/store/actions/tokens.actions';
+import { selectTokens } from 'src/app/store/features/tokens.feature';
 
 @Injectable()
 export class AuthService {
-  private ACCESS_TOKEN_KEY = 'accessToken';
-  private REFRESH_TOKEN_KEY = 'refreshToken';
-
   constructor(private http: HttpClient, private store: Store) {}
 
   login(
-    userData: Pick<ICredentials, 'email' | 'password'>
+    authData: Pick<IAuthData, 'email' | 'password'>
   ): Observable<IUserWithCredentials> {
-    return this.getCredentials(userData, true);
+    return this.updateCredentials(authData, true);
   }
 
-  register(userData: ICredentials): Observable<IUserWithCredentials> {
-    return this.getCredentials(userData, false);
+  register(authData: IAuthData): Observable<IUserWithCredentials> {
+    return this.updateCredentials(authData, false);
   }
 
   logout(): Observable<void> {
+    this.store.dispatch(UserActions.loadingUser());
+
     return this.http.get<void>(apiEndpoints.auth.logout).pipe(
       finalize(() => {
-        this.clearTokens();
-        this.store.dispatch(UserActions.removeUser());
+        this.deleteCredentials();
       })
     );
   }
 
-  saveTokens(tokens: ITokens): void {
-    localStorage.setItem(this.ACCESS_TOKEN_KEY, tokens.access);
-    localStorage.setItem(this.REFRESH_TOKEN_KEY, tokens.refresh);
+  saveTokens({ access, refresh }: ITokens): void {
+    this.store.dispatch(
+      TokensActions.addTokens({ tokens: { access, refresh } })
+    );
   }
 
   refreshToken(): Observable<Object> {
-    const refreshToken = localStorage.getItem(this.REFRESH_TOKEN_KEY);
+    let refreshToken = '';
+    this.store
+      .select(selectTokens)
+      .subscribe(({ refresh }) => (refreshToken = refresh));
 
     if (!refreshToken) {
       return throwError(() => new Error('Not provided refresh token'));
@@ -50,12 +54,21 @@ export class AuthService {
         headers: { Authorization: `Bearer ${refreshToken}` },
       })
       .pipe(
-        tap((resp) => localStorage.setItem(this.ACCESS_TOKEN_KEY, resp.access))
+        tap(({ access }) =>
+          this.store.dispatch(
+            TokensActions.addTokens({
+              tokens: { access, refresh: refreshToken },
+            })
+          )
+        )
       );
   }
 
   getAuthorizationHeader(): string | null {
-    const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY);
+    let accessToken = '';
+    this.store
+      .select(selectTokens)
+      .subscribe(({ access }) => (accessToken = access));
 
     if (accessToken) {
       return `Bearer ${accessToken}`;
@@ -65,26 +78,28 @@ export class AuthService {
   }
 
   public deleteCredentials(): void {
-    this.clearTokens();
     this.store.dispatch(UserActions.removeUser());
+    this.store.dispatch(TokensActions.removeTokens());
   }
 
-  private clearTokens(): void {
-    this.saveTokens({ access: '', refresh: '' });
-  }
-
-  private getCredentials(
-    userData: ICredentials,
+  private updateCredentials(
+    authData: IAuthData,
     isLogginRoute: boolean = false
   ): Observable<IUserWithCredentials> {
     const apiEndpoint = isLogginRoute
       ? apiEndpoints.auth.login
       : apiEndpoints.auth.register;
 
-    return this.http.post<IUserWithCredentials>(apiEndpoint, userData).pipe(
-      tap((resp: IUserWithCredentials) => {
-        this.saveTokens({ access: resp.access, refresh: resp.refresh });
-        this.store.dispatch(UserActions.addUser({ user: resp.user }));
+    this.store.dispatch(UserActions.loadingUser());
+
+    return this.http.post<IUserWithCredentials>(apiEndpoint, authData).pipe(
+      tap(({ user, access, refresh }: IUserWithCredentials) => {
+        this.store.dispatch(UserActions.addUser({ user }));
+        this.store.dispatch(
+          TokensActions.addTokens({
+            tokens: { access, refresh },
+          })
+        );
       })
     );
   }

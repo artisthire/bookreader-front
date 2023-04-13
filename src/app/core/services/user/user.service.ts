@@ -1,13 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, tap } from 'rxjs';
+
 import { IUser } from './user.model';
+import { apiEndpoints } from '../../utils/api-endpoints';
+import { UserActions } from 'src/app/store/actions/user.actions';
 
 @Injectable()
 export class UserService {
-  private userSubject$ = new BehaviorSubject<IUser | null>(null);
-  public userData$ = this.userSubject$.asObservable();
+  constructor(private http: HttpClient, private store: Store) {}
 
-  setUser(data: IUser | null): void {
-    this.userSubject$.next(data);
+  public getUser(): Observable<IUser> {
+    return this.http
+      .get<IUser>(apiEndpoints.user)
+      .pipe(tap((user) => this.store.dispatch(UserActions.addUser({ user }))));
   }
 }

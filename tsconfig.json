@@ -10,7 +10,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,

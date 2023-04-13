@@ -3,7 +3,3 @@ export interface IUser {
   email: string;
   _id: string;
 }
-
-export interface ILoginUser extends IUser {
-  login: boolean;
-}

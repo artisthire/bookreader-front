@@ -29,7 +29,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     refresh: apiEndpoints.auth.refresh,
   };
   private tokenRefreshing: boolean = false;
-  private tokenRefreshTimeout: number = 30000;
+  private tokenRefreshTimeout: number = 20000;
   private tokenRefreshSource$ = new Subject();
   private tokenRefreshed$ = this.tokenRefreshSource$.asObservable();
 
@@ -45,6 +45,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> | Observable<never> {
     let cloneReq = req.clone({ url: `${this.API_URL}/${req.url}` });
 
+    // for not authentification endpoints
     if (!Object.keys(this.AUTH_ENDPOINTS).includes(req.url)) {
       cloneReq = this.addAuthHeader(cloneReq);
     }
@@ -62,12 +63,14 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> | Observable<never> {
     if (error.status === 401) {
+      // logout if a try of refresh token is fail
       if (error.url?.endsWith(this.AUTH_ENDPOINTS.refresh)) {
         this.tokenRefreshing = false;
         this.logout();
         return EMPTY;
       }
 
+      // show auth error for login and register page
       if (
         error.url?.endsWith(this.AUTH_ENDPOINTS.login) ||
         error.url?.endsWith(this.AUTH_ENDPOINTS.register)

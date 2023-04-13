@@ -7,7 +7,10 @@ export class ErrorService {
   constructor(@Inject(DOCUMENT) private documentRef: Document) {}
 
   getClientMessage(error: Error): string {
-    if (!this.documentRef.defaultView?.navigator.onLine) {
+    if (
+      this.documentRef.defaultView &&
+      !this.documentRef.defaultView.navigator.onLine
+    ) {
       return 'No Internet Connection';
     }
 
@@ -27,7 +30,7 @@ export class ErrorService {
       return 'A client-side or network error occurred';
     }
 
-    const message = error.error.message ?? error.message;
+    const message = error.error.message && error.message;
     return `${message}. Status code: ${error.status}`;
   }
 

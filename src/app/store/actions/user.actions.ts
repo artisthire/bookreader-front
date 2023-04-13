@@ -6,5 +6,6 @@ export const UserActions = createActionGroup({
   events: {
     'Add User': props<{ user: IUser }>(),
     'Remove User': emptyProps(),
+    'Loading User': emptyProps(),
   },
 });

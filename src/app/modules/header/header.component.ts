@@ -7,11 +7,14 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { finalize, Subscription } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 
-import { selectUser } from 'src/app/store/selectors/user.selectors';
+import {
+  selectUser,
+  selectUserAuthorized,
+} from 'src/app/store/features/user.feature';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
-import { ILoginUser } from 'src/app/core/services/user/user.model';
+import { IUser } from 'src/app/core/services/user/user.model';
 
 @Component({
   selector: 'app-header',
@@ -20,8 +23,9 @@ import { ILoginUser } from 'src/app/core/services/user/user.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  private userSubscription!: Subscription;
-  public user!: ILoginUser;
+  public user!: IUser;
+  public userAuthorized: boolean = false;
+  private destroy$: Subject<void> = new Subject();
 
   constructor(
     private router: Router,
@@ -31,20 +35,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userSubscription = this.store.select(selectUser).subscribe((user) => {
-      this.user = user;
-      this.cd.markForCheck();
-    });
+    this.store
+      .select(selectUser)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        this.user = user;
+        this.cd.detectChanges();
+      });
+    this.store
+      .select(selectUserAuthorized)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((userAuthorized) => {
+        this.userAuthorized = userAuthorized;
+        this.cd.detectChanges();
+      });
   }
 
   ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public logout(): void {
     this.authService
       .logout()
-      .pipe(finalize(() => this.router.navigate(['login'])))
+      .pipe(
+        finalize(() => this.router.navigate(['login'])),
+        takeUntil(this.destroy$)
+      )
       .subscribe();
   }
 }

@@ -1,12 +1,12 @@
 <div
   class="flex-container flex gap-2 min-h-[60px] py-3.5 bg-white shadow"
-  [ngClass]="{ 'justify-between': user.login }"
+  [ngClass]="{ 'justify-between': userAuthorized }"
 >
   <a
     href="/"
     title="Bookreader"
     class="flex items-center justify-center w-[33px] h-[33px] rounded-full hover:bg-gray-200 focus:bg-gray-200"
-    [ngClass]="{ 'm-auto md:m-0': !user.login }"
+    [ngClass]="{ 'm-auto md:m-0': !userAuthorized }"
     ><svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -20,7 +20,7 @@
     </svg>
   </a>
 
-  <ng-container *ngIf="user.login">
+  <ng-container *ngIf="userAuthorized">
     <div class="hidden items-center gap-3 font-light md:flex">
       <span
         class="w-[33px] h-[33px] flex items-center justify-center text-center font-semibold rounded-full bg-gray-200"

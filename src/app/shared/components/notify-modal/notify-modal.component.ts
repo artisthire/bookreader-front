@@ -14,12 +14,11 @@ import { INotifyModalData } from './notify-modal.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotifyModalComponent implements IModal<INotifyModalData> {
+  public _data!: INotifyModalData;
   set data(data: INotifyModalData) {
     this._data = data;
     this.cd.detectChanges();
   }
-
-  public _data!: INotifyModalData;
 
   constructor(
     private readonly cd: ChangeDetectorRef,

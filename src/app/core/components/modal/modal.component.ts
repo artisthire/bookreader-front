@@ -13,7 +13,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IModalData } from '../../services/modal/modal.model';
 import { ModalService } from '../../services/modal/modal.service';
 
@@ -33,7 +33,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   @ContentChild('content', { read: ViewContainerRef })
   private readonly content!: ViewContainerRef;
 
-  private sub!: Subscription;
+  private destroy$: Subject<void> = new Subject();
   private readonly window: Window | null;
   private readonly htmlEl: HTMLElement;
 
@@ -48,19 +48,20 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sub = this.modalService.modalObservable$.subscribe(
-      (data: IModalData<any> | null) => {
+    this.modalService.modalObservable$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: IModalData<any> | null) => {
         if (!data) {
           this.close();
         } else {
           this.open(data);
         }
-      }
-    );
+      });
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public onWindowKeydown = (event: KeyboardEvent) => {
