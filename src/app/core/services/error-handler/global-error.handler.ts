@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
 import { ErrorService } from '../error/error.service';
 import { NotificationService } from '../notification/notification.service';
+import { ApplicationError } from '../error/application-error';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
@@ -10,9 +11,15 @@ export class GlobalErrorHandler implements ErrorHandler {
     private readonly notificationService: NotificationService
   ) {}
 
-  handleError(error: Error | HttpErrorResponse) {
+  handleError(error: ApplicationError | HttpErrorResponse) {
     let message: string;
     let stackTrace: string;
+
+    if (
+      !(error instanceof HttpErrorResponse || error instanceof ApplicationError)
+    ) {
+      return;
+    }
 
     if (error instanceof HttpErrorResponse) {
       message = this.errorService.getServerMessage(error);

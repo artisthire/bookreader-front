@@ -1,12 +1,13 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import { ApplicationError } from './application-error';
 
 @Injectable()
 export class ErrorService {
   constructor(@Inject(DOCUMENT) private documentRef: Document) {}
 
-  getClientMessage(error: Error): string {
+  getClientMessage(error: ApplicationError): string {
     if (
       this.documentRef.defaultView &&
       !this.documentRef.defaultView.navigator.onLine
@@ -17,7 +18,7 @@ export class ErrorService {
     return error.message ? error.message : error.toString();
   }
 
-  getClientStack(error: Error): string {
+  getClientStack(error: ApplicationError): string {
     if (error.stack) {
       return error.stack;
     }
