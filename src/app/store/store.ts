@@ -19,4 +19,3 @@ export const reducers = {
   [userFeature.name]: userFeature.reducer,
   [tokensFeature.name]: tokensFeature.reducer,
 };
-export type IState = typeof reducers;

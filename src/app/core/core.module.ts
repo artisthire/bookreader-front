@@ -1,22 +1,26 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import { environment } from './../../environments/environment';
 import {
   AuthenticationInterceptor,
   API_URL,
 } from './services/interceptors/authentication-interceptor';
+import { SharedModule } from '../shared/shared.module';
 import { UserService } from './services/user/user.service';
 import { AuthService } from './services/auth/auth.service';
 import { ModalService } from './services/modal/modal.service';
 import { ModalComponent } from './components/modal/modal.component';
+import { NotifyModalComponent } from './components/notify-modal/notify-modal.component';
 import { ErrorService } from './services/error/error.service';
 import { NotificationService } from './services/notification/notification.service';
 import { GlobalErrorHandler } from './services/error-handler/global-error.handler';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
-  declarations: [ModalComponent],
-  imports: [CommonModule],
+  declarations: [ModalComponent, NotifyModalComponent, HeaderComponent],
+  imports: [CommonModule, SharedModule],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -31,6 +35,6 @@ import { GlobalErrorHandler } from './services/error-handler/global-error.handle
     NotificationService,
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
-  exports: [ModalComponent],
+  exports: [ModalComponent, NotifyModalComponent, HeaderComponent],
 })
 export class CoreModule {}

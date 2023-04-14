@@ -8,8 +8,6 @@ import { reducers, metaReducers } from './store/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { HeaderModule } from './modules/header/header.module';
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -25,7 +23,6 @@ import { HeaderModule } from './modules/header/header.module';
     AppRoutingModule,
     HttpClientModule,
     CoreModule,
-    HeaderModule,
   ],
   bootstrap: [AppComponent],
 })
