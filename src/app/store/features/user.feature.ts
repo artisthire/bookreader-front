@@ -25,8 +25,9 @@ export const userFeature = createFeature({
     on(UserActions.loadingUser, (state) => ({ ...state, userLoading: true }))
   ),
   extraSelectors: ({ selectUser }) => ({
-    selectUserAuthorized: createSelector(selectUser, (user) =>
-      Boolean(user._id)
+    selectUserAuthorized: createSelector(
+      selectUser,
+      (user) => user?._id.length > 0
     ),
   }),
 });

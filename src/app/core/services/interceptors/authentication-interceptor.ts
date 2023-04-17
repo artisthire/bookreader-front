@@ -46,7 +46,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     let cloneReq = req.clone({ url: `${this.API_URL}/${req.url}` });
 
     // for not authentification endpoints
-    if (!Object.keys(this.AUTH_ENDPOINTS).includes(req.url)) {
+    if (!Object.values(this.AUTH_ENDPOINTS).includes(req.url)) {
       cloneReq = this.addAuthHeader(cloneReq);
     }
 

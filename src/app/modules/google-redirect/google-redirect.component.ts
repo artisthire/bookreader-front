@@ -1,17 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
-import { UserService } from 'src/app/core/services/user/user.service';
 
 interface IRedirectTokens {
-  accessToken: string;
-  refreshToken: string;
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 @Component({
@@ -20,35 +13,27 @@ interface IRedirectTokens {
   styleUrls: ['./google-redirect.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GoogleRedirectComponent implements OnInit, OnDestroy {
-  private destroy$: Subject<void> = new Subject();
-
+export class GoogleRedirectComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
-    private userService: UserService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     const { accessToken, refreshToken } = this.route.snapshot
       .queryParams as IRedirectTokens;
+
     if (!accessToken || !refreshToken) {
-      throw Error('Google authentification error.');
+      console.error('Google authentification error.');
+      this.router.navigate(['login']);
+      return;
     }
 
     this.authService.saveTokens({
       access: accessToken,
       refresh: refreshToken,
     });
-    this.userService
-      .getUser()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.router.navigate(['']));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.router.navigate(['']);
   }
 }

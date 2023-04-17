@@ -17,9 +17,15 @@ import { ErrorService } from './services/error/error.service';
 import { NotificationService } from './services/notification/notification.service';
 import { GlobalErrorHandler } from './services/error-handler/global-error.handler';
 import { HeaderComponent } from './components/header/header.component';
+import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 
 @NgModule({
-  declarations: [ModalComponent, NotifyModalComponent, HeaderComponent],
+  declarations: [
+    ModalComponent,
+    NotifyModalComponent,
+    HeaderComponent,
+    ProgressBarComponent,
+  ],
   imports: [CommonModule, SharedModule],
   providers: [
     {
@@ -35,6 +41,11 @@ import { HeaderComponent } from './components/header/header.component';
     NotificationService,
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
-  exports: [ModalComponent, NotifyModalComponent, HeaderComponent],
+  exports: [
+    ModalComponent,
+    NotifyModalComponent,
+    HeaderComponent,
+    ProgressBarComponent,
+  ],
 })
 export class CoreModule {}
