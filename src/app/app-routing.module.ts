@@ -12,19 +12,33 @@ const routes: Routes = [
   },
   {
     path: '',
-    canActivateChild: [authGuard],
+    canActivate: [authGuard],
     children: [
+      {
+        path: 'login',
+        loadChildren: () =>
+          import('./modules/login/login.module').then((m) => m.LoginModule),
+      },
+      {
+        path: 'register',
+        loadChildren: () =>
+          import('./modules/register/register.module').then(
+            (m) => m.RegisterModule
+          ),
+      },
+      {
+        path: 'training',
+        loadChildren: () =>
+          import('./modules/training/training.module').then(
+            (m) => m.TrainingModule
+          ),
+      },
       {
         path: '',
         loadChildren: () =>
           import('./modules/library/library.module').then(
             (m) => m.LibraryModule
           ),
-      },
-      {
-        path: 'login',
-        loadChildren: () =>
-          import('./modules/login/login.module').then((m) => m.LoginModule),
       },
     ],
   },

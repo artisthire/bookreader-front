@@ -34,6 +34,6 @@ export class GoogleRedirectComponent implements OnInit {
       access: accessToken,
       refresh: refreshToken,
     });
-    this.router.navigate(['']);
+    this.router.navigate(['/']);
   }
 }

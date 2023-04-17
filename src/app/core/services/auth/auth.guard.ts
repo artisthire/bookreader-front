@@ -29,7 +29,7 @@ export const authGuard: CanActivateFn = (_, state: RouterStateSnapshot) => {
       }
 
       if (accessToken === '') {
-        return of(router.parseUrl('/login'));
+        return of(router.createUrlTree(['/login']));
       }
 
       if (userAuthorized) {
@@ -42,85 +42,4 @@ export const authGuard: CanActivateFn = (_, state: RouterStateSnapshot) => {
       );
     })
   );
-
-  // return store.select(selectTokens)
-  //   .pipe(mergeMap(
-  //     ({access}) => store.select(selectUserAuthorized).pipe(map((userAuthorized) => ({access, userAuthorized}))) ));
-
-  // .pipe(
-  //   map(([{ access: accessToken }, userAuthorized]) => {
-  //     if (isAuthPages) {
-  //       if (accessToken === '') {
-  //         return of(true);
-  //       }
-
-  //       if (userAuthorized) {
-  //         return of(router.parseUrl('/'));
-  //       }
-  //     }
-
-  //     if (accessToken === '') {
-  //       return of(router.parseUrl('/login'));
-  //     }
-
-  //     if (userAuthorized) {
-  //       return true;
-  //     }
-
-  //     return userService.getUser().pipe(
-  //       mergeMap(() => of(router.parseUrl('/'))),
-  //       catchError(() => of(router.parseUrl('/login')))
-  //     );
-
-  //     // if (access === '') {
-  //     //   if (isAuthPages) {
-  //     //     return true;
-  //     //   }
-
-  //     //   return router.parseUrl('/login');
-  //     // }
-
-  //     // if (userAuthorized) {
-  //     //   if (isAuthPages) {
-  //     //     return router.parseUrl('/');
-  //     //   }
-
-  //     //   return true;
-  //     // }
-
-  //     // if (isAuthPages) {
-  //     //   return true;
-  //     // }
-
-  //     // return userService.getUser().pipe(
-  //     //   map(() => of(userAuthorizedSuccess)),
-  //     //   catchError(() => of(userAuthorizedReject))
-  //     // );
-  //   })
-
-  // return store.select(selectTokens).pipe(
-  //   map(({ access }) => {
-  //     if (access === '') {
-  //       if (state.url.endsWith('login')) {
-  //         return of(true);
-  //       }
-
-  //       return of(router.parseUrl('/login'));
-  //     }
-
-  //     return userService.getUser().pipe(
-  //       map(() => of(userAuthorizedSuccess)),
-  //       catchError(() => of(userAuthorizedReject))
-  //     );
-  //   })
-  // );
-
-  // store.select(selectTokens)
-
-  // return userService.getUser().pipe(
-  //   map(() => true),
-  //   catchError(() => of(router.parseUrl('/login')))
-  // );
-
-  // return router.parseUrl('/login');
 };
