@@ -7,9 +7,10 @@ import { tokensFeature } from './features/tokens.feature';
 function localStorageSyncReducer(
   reducer: ActionReducer<any>
 ): ActionReducer<any> {
-  return localStorageSync({ keys: [tokensFeature.name], rehydrate: true })(
-    reducer
-  );
+  return localStorageSync({
+    keys: [userFeature.name, tokensFeature.name],
+    rehydrate: true,
+  })(reducer);
 }
 
 export const metaReducers: Array<MetaReducer<any, any>> = [

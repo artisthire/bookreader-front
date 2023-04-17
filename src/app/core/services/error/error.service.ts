@@ -7,7 +7,7 @@ import { ApplicationError } from './application-error';
 export class ErrorService {
   constructor(@Inject(DOCUMENT) private documentRef: Document) {}
 
-  getClientMessage(error: ApplicationError): string {
+  getClientMessage(error: Error | ApplicationError): string {
     if (
       this.documentRef.defaultView &&
       !this.documentRef.defaultView.navigator.onLine
@@ -18,7 +18,7 @@ export class ErrorService {
     return error.message ? error.message : error.toString();
   }
 
-  getClientStack(error: ApplicationError): string {
+  getClientStack(error: Error | ApplicationError): string {
     if (error.stack) {
       return error.stack;
     }

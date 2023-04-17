@@ -11,15 +11,9 @@ export class GlobalErrorHandler implements ErrorHandler {
     private readonly notificationService: NotificationService
   ) {}
 
-  handleError(error: ApplicationError | HttpErrorResponse) {
+  handleError(error: Error | ApplicationError | HttpErrorResponse) {
     let message: string;
     let stackTrace: string;
-
-    if (
-      !(error instanceof HttpErrorResponse || error instanceof ApplicationError)
-    ) {
-      return;
-    }
 
     if (error instanceof HttpErrorResponse) {
       message = this.errorService.getServerMessage(error);
@@ -29,7 +23,15 @@ export class GlobalErrorHandler implements ErrorHandler {
       stackTrace = this.errorService.getClientStack(error);
     }
 
-    this.notificationService.showError(message);
-    console.log(message, '\n', stackTrace);
+    if (
+      error instanceof HttpErrorResponse ||
+      error instanceof ApplicationError
+    ) {
+      this.notificationService.showError(message);
+      console.error(message, '\n', stackTrace);
+      return;
+    }
+
+    throw error;
   }
 }
